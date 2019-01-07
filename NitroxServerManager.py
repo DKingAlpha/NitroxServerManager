@@ -21,9 +21,9 @@ class server:
         html = ''
         for k in auth_serverinfo:
             html = html + auth_serverinfo[k] + '\r\n'
-        return 
+        return html
 
-    
+
 def save_data(*args):
     with open('serverdata.pickle', 'wb+') as f:
         pickle.dump(args, f)
@@ -33,6 +33,7 @@ def load_data():
         save_data({}, {}, {})
     with open('serverdata.pickle', 'rb') as f:
         return pickle.load(f)
+
 
 class notify:
     def GET(self, op, pingerid, serverinfo):
@@ -82,9 +83,6 @@ def clean_outdated_server():
         time.sleep(10)
         auth_serverinfo, uniq_server_dict, keepalive = load_data()
         current_time = time.time()
-        print(auth_serverinfo)
-        print(uniq_server_dict)
-        print(keepalive)
         for id in list(keepalive.keys()):
             delta = current_time - keepalive[id]
             if delta > 12*60: # 12min not updated
@@ -94,14 +92,13 @@ def clean_outdated_server():
                 print("Removing " + serverinfo)
         save_data(auth_serverinfo, uniq_server_dict, keepalive)
 
+
 class MyApplication(web.application):
     def run(self, port=80, *middleware):
         func = self.wsgifunc(*middleware)
         return web.httpserver.runsimple(func, ('0.0.0.0', port))
 
-g = globals()
-
 if __name__ == "__main__":
-    app = MyApplication(urls, g)
+    app = MyApplication(urls, globals())
     threading.Thread(target=clean_outdated_server).start()
-    app.run()
+    app.run(port=80)
