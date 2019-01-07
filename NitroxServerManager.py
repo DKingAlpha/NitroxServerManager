@@ -41,9 +41,10 @@ class notify:
         # workaround for not working global here
         auth_serverinfo, uniq_server_dict, keepalive = load_data()
 
+        # serverinfo is in standard format of "Name|12.34.56.78:11000|0"
         i_serverstr = serverinfo.rsplit('|', 1)[0]
-        i_serveraddr = i_serverstr.rsplit(':', 1)[1]
-        i_playernum = serverinfo.rsplit('|', 1)[1]
+        i_serveraddr = i_serverstr.rsplit('|', 1)[1]
+
         if op == 'online':
             if pingerid in auth_serverinfo:
                 o_serverstr = auth_serverinfo[pingerid].rsplit('|', 1)[0]
