@@ -89,7 +89,7 @@ def clean_outdated_server():
             delta = current_time - keepalive[id]
             if delta > 12*60: # 12min not updated
                 serverinfo = auth_serverinfo.pop(id)
-                uniq_server_dict.pop(serverinfo.rsplit('|', 1)[0])
+                uniq_server_dict.pop((serverinfo.rsplit('|', 1)[0]).rsplit(':', 1)[1])
                 keepalive.pop(id)
                 print(serverinfo + " has not updated since 10 minutes ago. Removing it.")
         save_data(auth_serverinfo, uniq_server_dict, keepalive)
