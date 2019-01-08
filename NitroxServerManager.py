@@ -43,6 +43,8 @@ class notify:
 
         # serverinfo is in standard format of "Name|12.34.56.78:11000|0"
         i_serverstr = serverinfo.rsplit('|', 1)[0]
+        i_playernum = serverinfo.rsplit('|', 1)[1]
+        i_servername = i_serverstr.rsplit('|', 1)[0].replace('%2F', '/') # %2F is not parsed by web.py
         i_serveraddr = i_serverstr.rsplit('|', 1)[1]
 
         if op == 'online':
@@ -50,7 +52,7 @@ class notify:
                 o_serverstr = auth_serverinfo[pingerid].rsplit('|', 1)[0]
                 o_playernum = auth_serverinfo[pingerid].rsplit('|', 1)[1]
                 if i_serverstr == o_serverstr:
-                    auth_serverinfo[pingerid] = serverinfo
+                    auth_serverinfo[pingerid] = i_servername + '|' + i_serveraddr + '|' + i_playernum
                     uniq_server_dict[i_serveraddr] = pingerid
                     keepalive[pingerid] = time.time()
                     save_data(auth_serverinfo, uniq_server_dict, keepalive)
@@ -62,7 +64,7 @@ class notify:
                     return "Wrong key to update server info! If this is your server, it will recover in next update"
                 else:
                     if len(pingerid) == 32:
-                        auth_serverinfo[pingerid] = serverinfo
+                        auth_serverinfo[pingerid] = i_servername + '|' + i_serveraddr + '|' + i_playernum
                         uniq_server_dict[i_serveraddr] = pingerid
                         keepalive[pingerid] = time.time()
                         save_data(auth_serverinfo, uniq_server_dict, keepalive)
