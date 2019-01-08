@@ -44,7 +44,8 @@ class notify:
         # serverinfo is in standard format of "Name|12.34.56.78:11000|0"
         i_serverstr = serverinfo.rsplit('|', 1)[0]
         i_playernum = serverinfo.rsplit('|', 1)[1]
-        i_servername = i_serverstr.rsplit('|', 1)[0].replace('%2F', '/') # %2F is not parsed by web.py
+        # %2F is not parsed by web.py
+        i_servername = i_serverstr.rsplit('|', 1)[0].replace('%2F', '/').replace('|', '')
         i_serveraddr = i_serverstr.rsplit('|', 1)[1]
 
         if op == 'online':
